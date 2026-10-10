@@ -1,4 +1,4 @@
-package assignment2;
+package gradetracker;
 
 /* Student Name: Salman Shafi
  * Program Name: GradeApp.java

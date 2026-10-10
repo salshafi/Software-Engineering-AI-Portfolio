@@ -1,4 +1,4 @@
-package assignment2;
+package gradetracker;
 
 /* Student Name: Salman Shafi
  * Program Name: Student.java
@@ -8,44 +8,59 @@ package assignment2;
  */
 public class Student {
 
-    // highest mark a test can have, it never changes
+    // the highest mark a test can have, it never changes
     public static final double MAX_SCORE = 100.0;
 
-    // one number shared by all students, counts how many were created
+    // the lowest mark a test can have, it never changes
+    public static final double MIN_SCORE = 0.0;
+
+    // one number shared by all students, it counts how many were created
     private static int totalStudentsTracked = 0;
 
-    // every student has their own name and scores
+    // each student has their own name and their own scores
     private String studentName;
     private double[] testScores;
 
-    // makes a student with the given name and 3 scores that start at 0.0
+    // makes a student with this name, the 3 scores start at 0.0
     public Student(String studentName) {
         this.studentName = studentName;
         this.testScores = new double[3];
-        totalStudentsTracked++;   // only counted here so nobody gets counted twice
+        totalStudentsTracked++;   // counted only here so a student is never counted twice
     }
 
-    // no name given, so use the constructor above with "Unknown"
+    // no name given, so call the constructor above with "Unknown"
     public Student() {
-        this("Unknown");   // has to be the first line
+        this("Unknown");   // this has to be the first line
     }
 
-    // copies the scores in, anything over MAX_SCORE gets changed to MAX_SCORE
+    // saves the scores from an array
+    // a score over MAX_SCORE is changed to MAX_SCORE
+    // a score under MIN_SCORE is changed to MIN_SCORE
     public void setScores(double[] scores) {
-        // stops at 3 so a longer array can't go past the end
+        // if no array was given, print a message and keep the old scores
+        if (scores == null) {
+            System.out.println("No scores given. Scores unchanged.");
+            return;
+        }
+
+        // only go up to 3 scores so a longer array can't go past the end
         int count = Math.min(scores.length, testScores.length);
         for (int i = 0; i < count; i++) {
             if (scores[i] > MAX_SCORE) {
                 System.out.println("Score " + scores[i] + " is too high. Using " + MAX_SCORE);
                 testScores[i] = MAX_SCORE;
+            } else if (scores[i] < MIN_SCORE) {
+                System.out.println("Score " + scores[i] + " is too low. Using " + MIN_SCORE);
+                testScores[i] = MIN_SCORE;
             } else {
                 testScores[i] = scores[i];
             }
         }
     }
 
-    // same thing with 3 separate numbers, puts them in an array and calls
-    // the array version so the MAX_SCORE check is only written once
+    // same job but takes 3 separate numbers
+    // it puts them in an array and calls the method above,
+    // so the score checks are only written once
     public void setScores(double s1, double s2, double s3) {
         double[] temp = {s1, s2, s3};
         setScores(temp);
@@ -69,7 +84,7 @@ public class Student {
         System.out.printf("  Average: %.2f%n%n", calculateAverage());
     }
 
-    // main can't see the private counter, so it asks for it with this
+    // the counter is private, so other classes use this method to read it
     public static int getTotalStudentsTracked() {
         return totalStudentsTracked;
     }
